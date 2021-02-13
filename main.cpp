@@ -5,6 +5,8 @@
 /* run this program using the console pauser or add your own getch, system("pause") or input loop */
 using namespace std;
 int main(int argc, char** argv) {
+	Inventario* I = new Inventario();
+	Producto* P = new Producto();
 	int opcion1 = 0;
 	while(opcion1!=4){
 		cout << "Bem Vindo" << endl;
@@ -30,13 +32,11 @@ int main(int argc, char** argv) {
 					cout<<endl;
 					switch(opcion2){
 						case 1:{
-							Inventario* I = new Inventario();
-							Producto* P = new Producto();
 							long id;
 							int cantidad;
 							double precio;
 					        string categoria,nombre;
-					        cout << "Id: " << endl;
+					        cout << "Id: " ;
 					        cin >> id;
 					        for(int i = 0;i<I->getInventario().size();i++){
 					        	P = I->getInventario().at(i);
@@ -47,33 +47,35 @@ int main(int argc, char** argv) {
 					        		cin>>id;
 								}
 							}
-					        cout << "Nombre: " << endl;
+					        cout << "Nombre: " ;
 					        cin >> nombre;
-					        cout << "Cantidad: " << endl;
+					        cout << "Cantidad: " ;
 					        cin >> cantidad;
 					        while(cantidad<=0){
 					        	cout<<"Cantidad del producto no puede ser 0 o un numero negativo"<<endl;
-					        	cout<<"Cantidad: "<<endl;
+					        	cout<<"Cantidad: ";
 					        	cin>>cantidad;
 							}
-					        cout << "Categoria: " << endl;
+					        cout << "Categoria: " ;
 					        cin >> categoria;
 					        I->agregarCategoria(categoria);
-					        cout << "Precio: " << endl;
+					        cout << "Precio: " ;
 					        cin >> precio;
 					        while(precio<=0){
 					        	cout<<"Precio del producto no puede ser 0 o un numero negativo"<<endl;
-					        	cout<<"Precio: "<<endl;
+					        	cout<<"Precio: ";
 					        	cin>>precio;
 							}
-							I -> agregarProducto(new Producto(id,nombre,cantidad,categoria,precio));
+							Producto* P = new Producto(id,nombre,cantidad,categoria,precio);
+							I -> agregarProducto(P);
+							cout<<endl;
+							cout<<"Producto agregado Exitosamente"<<endl;
+							cout<<endl;
 							break;
 						}
 						case 2:{
-							Inventario* I2 = new Inventario();
-							Producto* P2 = new Producto();
 							int pos1;
-							I2->mostrarProductos();
+							I->mostrarProductos();
 							cout<<"Ingrese la posicion del producto que desea modificar: ";
 							cin>>pos1;
 							while(pos1<=0){
@@ -81,7 +83,7 @@ int main(int argc, char** argv) {
 								cout<<"Ingrese la posicion otra vez: ";
 								cin>>pos1;
 							}
-							P2 = I2->getInventario().at(pos1-1);
+							P = I->getInventario().at(pos1-1);
 							int opcion3 = 0;
 							while(opcion3!=5){
 								cout<<"Ingrese una opcion"<<endl;
@@ -97,7 +99,7 @@ int main(int argc, char** argv) {
 										string nuevo_nombre;
 										cout<<"Nuevo Nombre: ";
 										cin>>nuevo_nombre;
-										P2->setNombre(nuevo_nombre);
+										P->setNombre(nuevo_nombre);
 										break;
 									}
 									case 2:{
@@ -109,14 +111,14 @@ int main(int argc, char** argv) {
 					        				cout<<"Nueva Cantidad: "<<endl;
 					        				cin>>nueva_cantidad;
 										}
-										P2->setCantidad(nueva_cantidad);
+										P->setCantidad(nueva_cantidad);
 										break;
 									}
 									case 3:{
 										string nueva_categoria;
 										cout<<"Nueva Categoria: ";
 										cin>>nueva_categoria;
-										P2->setCategoria(nueva_categoria);
+										P->setCategoria(nueva_categoria);
 										break;
 									}
 									case 4:{
@@ -128,7 +130,7 @@ int main(int argc, char** argv) {
 					        				cout<<"Nuevo Precio: "<<endl;
 					        				cin>>nuevo_precio;
 										}
-										P2->setPrecio(nuevo_precio);
+										P->setPrecio(nuevo_precio);
 										break;
 									}
 								}
@@ -137,10 +139,8 @@ int main(int argc, char** argv) {
 							break;
 						}
 						case 3:{
-							Inventario* I3 = new Inventario();
-							Producto* P3 = new Producto();
 							int pos2;
-							I3->mostrarProductos();
+							I->mostrarProductos();
 							cout<<"Ingrese la posicion del producto que desea eliminar: ";
 							cin>>pos2;
 							while(pos2<=0){
@@ -148,8 +148,7 @@ int main(int argc, char** argv) {
 								cout<<"Ingrese la posicion otra vez: ";
 								cin>>pos2;
 							}
-							P3 = I3->getInventario().at(pos2-1);
-							I3->eliminarProducto(P3);
+							I->eliminarProducto(pos2-1);
 							cout<<"Producto eliminado exitosamente yay :)"<<endl;
 							break;
 						}
@@ -158,16 +157,20 @@ int main(int argc, char** argv) {
 				break;
 			}
 			case 2:{
-				Inventario* IC2 = new Inventario();
-				Producto* PC2 = new Producto();
-				IC2->listarProductos();
+				I->listarProductos();
 				break;
 			}
 			case 3:{
-				
+				string nombreBuscar;
+				cout<<"Ingrese la cadena que desea buscar: ";
+				cin>>nombreBuscar;
+				cout<<endl;
+				I->buscarNombre(nombreBuscar);
+				cout<<endl;
 				break;
 			}
 		}
 	}
+	I->~Inventario();
 	return 0;
 }

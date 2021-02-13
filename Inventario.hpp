@@ -16,10 +16,11 @@ class Inventario {
 	  	vector<string> getCategorias();
 	  	void agregarProducto(Producto*);
 	  	void agregarCategoria(string);
-		void eliminarProducto(Producto*);
+		void eliminarProducto(int);
 		void mostrarProductos();
 		Producto* buscarProducto(Producto*);
 		void listarProductos();
+		void buscarNombre(string nombre);
 			  	
 };
 #endif

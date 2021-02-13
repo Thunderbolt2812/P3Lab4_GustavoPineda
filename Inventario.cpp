@@ -1,10 +1,11 @@
+#include<string>
 #include "Inventario.hpp"
 Inventario::Inventario(){
 }
 
-Inventario::Inventario(vector<Producto*>_Productos,vector<string>_Categorias){
-  this->Productos = _Productos;
-  this->Categorias = _Categorias;
+Inventario::Inventario(vector<Producto*>Productos,vector<string>Categorias){
+  this->Productos = Productos;
+  this->Categorias = Categorias;
 }
 
 Inventario::~Inventario(){
@@ -29,13 +30,9 @@ void Inventario::agregarCategoria(string _categoria){
   Categorias.push_back(_categoria);
 }
 
-void Inventario::eliminarProducto(Producto* _producto){
-	for(int i = 0;i<Productos.size();i++){
-		if(_producto==Productos.at(i)){
-			Productos.erase(Productos.begin()+i);
-			delete Productos.at(i);
-		}
-	}
+void Inventario::eliminarProducto(int pos){
+	Productos.erase(Productos.begin()+pos);
+	delete Productos.at(pos);
 }
 
 Producto* Inventario::buscarProducto(Producto* _producto){
@@ -52,11 +49,19 @@ Producto* Inventario::buscarProducto(Producto* _producto){
 void Inventario::mostrarProductos(){
 	cout<<"-----Inventario-----"<<endl;
 	for(int i = 0;i<Productos.size();i++){
-		cout<<i+1<<") "<<Productos.at(i)<<endl;
+		Producto* P =Productos.at(i);
+		cout<<"Producto # "<<i+1<<endl;
+		cout<<"ID: "<<P->getId()<<endl;
+		cout<<"Nombre: "<<P->getNombre()<<endl;
+		cout<<"Cantidad de Unidades: "<<P->getCantidad()<<endl;
+		cout<<"Categoria: "<<P->getCategoria()<<endl;
+		cout<<"Precio: "<<P->getPrecio()<<endl;
+		cout<<endl;
 	}
 	cout<<endl;
 }
 void Inventario::listarProductos(){
+	vector<Producto*>unicos;
 	double acumPrecioCategoria;
 	int acumProductosCategoria;
 	cout<<"-----Inventario-----"<<endl;
@@ -64,9 +69,8 @@ void Inventario::listarProductos(){
 		Producto* P = Productos.at(i);
 		string categoriaProducto = P->getCategoria();
 		cout<<"Producto # "<<i+1<<endl;
-		cout<<"ID: "<<P->getId()<<endl;
 		cout<<"Unidades: "<<P->getCantidad()<<endl;
-		cout<<"Precio Total: "<<(P->getCantidad()*P->getPrecio());
+		cout<<"Precio Total: "<<(P->getCantidad()*P->getPrecio())<<endl;
 		for(int j = 0;j<Categorias.size();j++){
 			string categoria_temp = Categorias.at(i);
 			if(categoriaProducto==categoria_temp){
@@ -78,12 +82,51 @@ void Inventario::listarProductos(){
 			Producto* P2 = Productos.at(j);
 			string categoria_temp2 = P2->getCategoria();
 			if(categoriaProducto==categoria_temp2){
-				acumPrecioCategoria+=P2->getPrecio();
+				acumPrecioCategoria+=P2->getPrecio()*P2->getCantidad();
 			}
 		}
 		cout<<"Precio Total por Categoria: "<<acumPrecioCategoria<<endl;
+		for(int j = 0;j<Productos.size();j++){
+			Producto* P3 = Productos.at(j);
+			string categoria_temp3 = P3->getCategoria();
+			if(categoriaProducto==categoria_temp3){
+				unicos.push_back(P3);
+			}
+		}
+		
+		for(int c = 0;c<Productos.size();c++){
+			Producto* P4 = Productos.at(c);
+			string nombreTemp = P4->getNombre();
+			if(unicos.empty()){
+				unicos.push_back(P4);
+			}
+			for(int b = 0;b<unicos.size();b++){
+				Producto* P5 = unicos.at(b);
+				string nombreTemp2 = P5->getNombre();
+				if(nombreTemp.compare(nombreTemp2)!=0){
+					unicos.push_back(P4);
+				}
+			}
+		}
+		int contUnicos = 0;
+		for(int v =0;v<unicos.size();v++){
+			contUnicos++;
+		}
+		cout<<"Productos Unicos: "<<contUnicos;
+		cout<<endl;
+		cout<<endl;
 	}
 	cout<<endl;
+}
+
+void Inventario::buscarNombre(string nombre){
+	for(int j = 0;j < Productos.size();j++){
+		Producto* P6 = Productos.at(j);
+		string nombreProductoTemp = P6->getNombre();
+		if(nombreProductoTemp.find(nombre) != string::npos){
+			cout<<P6->getNombre()<<endl;
+		}
+	}
 }
 
 
